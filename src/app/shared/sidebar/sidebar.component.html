@@ -1,0 +1,10 @@
+<div class="d-flex flex-column bg-light sidebar p-3">
+    <ul class="nav nav-pills flex-column">
+        <li>
+            <a routerLink="/admin/dashboard" class="nav-link" [ngClass]="pageName === 'dashboard' ? 'active link-white':'link-dark'">Dashboard</a>
+        </li>
+        <li>
+            <a routerLink="/admin/feedback" class="nav-link" [ngClass]="pageName === 'feedback' ? 'active link-white':'link-dark'">Feedback</a>
+         </li>
+    </ul>
+</div>

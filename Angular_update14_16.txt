@@ -1,0 +1,436 @@
+//angular 14
+1. npm init @angular new-app -> to create an app of any version you can use this comand 
+2. Standlone component
+3. standalone directives & pipes
+4. Streamline page title accessibility -> pass title in router for seo purpose
+5. Bind to Protected Components Members -> protected keyword added
+6. Angular CLI Enhancements (ng --help) -> Angular CLI improverd
+7. Extended Developer Diagnostics  (ng commands) -> new ng CLi command added (ng analytics, ng cache, ng completion)
+8. Enhanced Template Diagnostics tsconfig -> when you are writing your code you can strictly apply the rules in tsconfig file
+9. Tree-shakable Error Messages https://angular.io/errors -> you can check visit thie url
+10. Typed Angular forms -> contact component -> you can check the contet component for the demonstration
+11. Angular dev tools -> install the chrome dev tools plugin you use it fo debugging
+12. NgModel changes OnPush components. -> From now if you making any changes in ng MOdel it will be also reflected in onpush component
+      https://www.digitalocean.com/community/tutorials/angular-change-detection-strategy
+13. Optional injectors in embedded Views -> view the demo in the admin->DASHBOARD component
+      https://angular.io/api/core/ng-template
+      https://stackblitz.com/edit/angular-ivy-aldx8q?file=src%2Fapp%2Fapp.component.html
+      https://netbasal.com/new-in-angular-13-pass-an-injector-to-embedded-views-cb71155025b4
+14. Latest primitives in CDK -> https://material.angular.io/cdk/test-harnesses/overview
+15. Inject method() -> check the demo using home component
+      less code more readable
+      we are using inject only in class creation or intilization time and not later
+      reduce inherited dependencies
+
+//angular 15
+To list a few:
+1 Image directive   check the demo in the about us component
+https://www.youtube.com/watch?v=xYv4y0nz08c
+https://www.youtube.com/watch?v=sbMkAOn7k_A
+https://angular.io/guide/image-directive
+
+2.  Standalone APIs
+    The standalone APIs allow you to bootstrap an application using a single component
+    router -> loadComponent for lazy loading in the standalone component
+
+3.  Router unwraps default imports
+      view the youting file. we can remove .then() from routing by adding default keyword
+
+4.  Improvements in the experimental esbuild support
+
+5.  Directive composition -> demo in the footer component and sharded-> directives -> grouped
+
+6.  Functional router guards -> check the guard
+
+7.  Automatic Imports in Language Service -> install "angular language service" extension 
+
+8.  Optimized CLI with a Bunch of Improvements
+      The first step is the configuration step which is reduced by removing test.ts, polyfills.ts and environments.
+      Furthermore, you can also specify your polyfills directly in angular.json in the polyfills section, like:
+      "polyfills": [
+      "zone.js"
+      ]
+9.  Improved stack traces
+      Angular v15 makes debugging Angular applications easier with cleaner stack traces. 
+      Angular worked with Google Chrome developers to present stack traces that show more of your application's code and 
+      less from the libraries it calls.
+      For more information about the Chrome DevTools and Angular's support for the cleaner stack traces, 
+      see https://developer.chrome.com/blog/devtools-modern-web-debugging/
+
+10. Angular Material MDC Components
+      Many of the components in Angular Material v15 have been refactored to be based on Angular Material Design Components (MDC) for the Web. 
+      The refactored components offer improved accessibility and adherence to the Material Design spec.
+      For more information about the updated components, see https://material.angular.io/guide/mdc-migration
+
+11. set Globally date -> see app.config.ts file and about us component that using date pipe
+
+12. CDK listbox component dev kit
+      For the creation of UI components, the Component Dev Kit (CDK) provides a collection of behavior primitives. 
+      The CDK listbox is a new primitive that is added in version 15 and you can modify it for your use case.
+
+1. Reactivity Revamped
+one of the major feature releases is the introduction of a new reactivity model structure.
+With the help of these new features, it will help to improve the performance of the application and also the developer experience. 
+Currently, this feature is released as a developer preview in the Angular 16 version. 
+Also, these features will provide full support for any backward compatibility and interoperability in the existing application. 
+Some of the key benefits of these features are 
+
+Improved runtime performance due to reduced computations during the change detection process.
+A simpler mental model for reactivity that clearly defines the view’s dependencies and data flow throughout the application.
+Fine-grained reactivity that allows for future releases to check changes only in affected components.
+The ability to make Zone.js optional in future releases by using signals to notify the framework when the model has changed.
+The delivery of computed properties without the penalty of recomputation in each change detection cycle.
+Better interoperability with RxJS through a plan to introduce reactive inputs.
+
+
+2. Configure zone in bootstrapApplication
+After the initial release of the standalone APIs we heard from developers that you’d like to be able to configure Zone.js with the new bootstrapApplication API.
+
+We added an option for this via provideZoneChangeDetection:
+
+bootstrapApplication(App, {
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })]
+});
+
+3. RxJS interoperability
+You’ll be able to easily “lift” signals to observables via functions from 
+@angular/core/rxjs-interop which is in developer preview as part of the v16 release!
+
+Here’s how you can convert a signal to observable:
+
+import { toObservable } from '@angular/core/rxjs-interop';
+
+@Component({...})
+export class App {
+  count = signal(0);
+  count$ = toObservable(this.count);
+
+  ngOnInit() {
+    this.count$.subscribe(() => ...);
+  }
+}
+
+
+and here’s an example how you can convert an observable to signal to avoid using the async pipe:
+
+import {toSignal} from '@angular/core/rxjs-interop';
+
+@Component({
+  template: `
+    <li *ngFor="let row of data()"> {{ row }} </li>
+  `
+})
+export class App {
+  dataService = inject(DataService);
+  data = toSignal(this.dataService.data$, []);
+}
+
+4. Signals developer preview
+A signal is a wrapper around a value that notifies interested consumers when that value changes. Signals can contain any value, from simple primitives to complex data structures.
+
+5. Non-destructive hydration support developer preview
+Angular no longer re-renders the application from scratch. 
+Instead, the framework looks up existing DOM nodes while building internal data structures and attaches event listeners to those nodes.
+
+The benefits are:
+
+No content flickering on a page for end users
+Better Web Core Vitals in certain scenarios
+Future-proof architecture that enables fine-grained code loading with primitives we’ll ship later this year. 
+Currently this surfaces in progressive lazy route hydration
+Easy integration with existing apps, in just a few lines of code (see code snippet below)
+Incremental adoption of hydration with the ngSkipHydration attribute in templates for components performing manual DOM manipulation
+In early tests we saw up to 45% improvement of Largest Contentful Paint with full app hydration!
+
+import {
+  bootstrapApplication,
+  provideClientHydration,
+} from '@angular/platform-browser';
+
+...
+
+bootstrapApplication(RootCmp, {
+  providers: [provideClientHydration()]
+});
+
+
+How to skip hydration for particular components
+
+<example-cmp ngSkipHydration />
+
+
+@Component({
+  ...
+  host: {ngSkipHydration: 'true'},
+})
+
+class ExampleCmp {}
+
+
+6. Esbuild dev-server developer preview
+     🔥 Bundle size dropped by ~10%
+     🔥 Build time 2x faste
+
+7. Create standalone app schematics
+ng new --standalone
+
+
+8. Required inputs
+@Component(...)
+export class App {
+  @Input({ required: true }) title: string = '';
+}
+
+
+9. Bind route data to inputs -> see the routes and about-us component
+We will be able to pass the route information to the component inputs, so we don’t need to inject the ActivatedRoute service anymore.
+
+
+const routes: Routes = [
+  {
+    path: "search/:id",
+    component: SearchComponent,
+    data: { title: "Search" },
+    resolve: { searchData: SearchDataResolver }
+  },
+];
+
+
+@Component({})
+export class SearchComponent implements OnInit {
+    @Input() query?: string; 
+    @Input('id') pathId?: string; 
+    @Input('title') dataTitle?: string;
+    @Input('searchData') resolvedData?: any; 
+
+    ngOnInit() {
+        // do something with the query
+        // do something with the pathId
+        // do something with the dataTitle
+        // do something with the resolvedData
+    }
+}
+
+// non-standalone version
+@NgModule({
+  imports: [
+    RouterModule.forRoot([], {
+      //... other features
+      bindToComponentInputs: true // <-- enable this feature
+    })
+  ],
+})
+export class AppModule {}
+
+// standalone version
+bootstrapApplication(App, {
+  providers: [
+    provideRouter(routes, 
+        //... other features
+        withComponentInputBinding() // <-- enable this feature
+    )
+  ],
+});
+https://itnext.io/bind-route-info-to-component-inputs-new-router-feature-1d747e559dc4
+
+
+10. Set inputs in NgComponentOutlet
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [NgComponentOutlet],
+  template: `
+    <ng-template *ngComponentOutlet="template; inputs: titleInputs" />
+  `,
+})
+export class AppComponent implements OnInit {
+  template = TitleComponent;
+
+  titleInputs = {
+    title: 'Inputs for Component outlets',
+    subTitle: `That's awesome`,
+  };
+}
+
+@Component({
+  selector: 'app-title',
+  standalone: true,
+  template: `NewWay: {{ title }} {{ subTitle }}`,
+})
+export class TitleComponent{
+  @Input() title!: string;
+  @Input() subTitle?: string;
+}
+https://medium.com/ngconf/new-input-binding-for-ngcomponentoutlet-cb18a86a739d
+
+
+11.☑️ NgTemplateOutlet strict type-checking
+https://medium.com/@thomas.laforge/ngtemplateoutlet-type-checking-5d2dcb07a2c6
+https://medium.com/@thomas.laforge/ngtemplateoutlet-typed-checking-part-2-274baa06f83d
+
+
+
+
+13. provideServerRendering for server-side standalone apps -> for migration
+import { provideServerRendering } from '@angular/platform-server';
+
+https://itnext.io/migrate-angular-universal-to-use-standalone-apis-67704106c1ee
+
+
+14. API to provide CSP nonce for inline stylesheets
+Content Security Policy (CSP) is an extra layer of security against attacks such as cross-site scripting (XSS) and data injection. 
+Angular CSP is a security feature that makes your site less vulnerable to attacks like XSS.
+The ngCspNonce attribute is useful if you have access to server-side templating
+<html>
+<body>
+  <app ngCspNonce="{% nonce %}"></app>  
+</body>
+</html>
+
+
+15.♻️ Reuse server generated component styles
+Prior to this change component styles generated on the server where removed prior to the 
+client side component being rendered and attached it's own styles. 
+In some cases this caused flickering. 
+To mitigate this initialNavigation: enabledBlocking' was introduced which 
+allowed the remove of server styles to be defer to a latter stage when the application has finished initialization.
+
+This commit changes the need for this, by not removing the server generated component styles and reuse them for client side rendering.
+
+16. Bye bye NGCC & entryComponents & support for Node.js v14
+reduce bundle size
+
+17. Self-closing tags <app-home></app-home>now we can write like this <app-home/>
+
+
+18. Improved tooling for standalone components, directives, and pipes -> for migrations
+To support developers transitioning their apps to standalone APIs, we developed migration schematics and 
+a standalone migration guide. Once you’re in your project directory run:
+
+ng generate @angular/core:standalone
+
+
+19. Improve Security and Prevent Cross-Site Scripting (XSS) Attacks, Angular latest version now supports native Trusted Types. 
+Trusted Types is a browser security mechanism created by the security team at Google.
+This browser feature enforces strict rules on how strings are used in sensitive contexts, 
+allowing for safer sanitization and rejection of unsafe strings.
+https://angular.io/guide/security
+
+20. The introduction of provideServiceWorker to enable usage of the Angular service worker without NgModules.
+One of the last modules that needed to be transitioned to a standalone provider function was ServiceWorkerModule.
+It is now done with provideServiceWorker:
+bootstrapApplication(AppComponent, {
+  providers: [provideServiceWorker('ngsw-worker.js', { enabled: !isDevMode() })]
+});
+
+It, of course, accepts the same options as the ServiceWorkerModule. 
+Running ng add @angular/pwa will now add provideServiceWorker to your providers if your application is a standalone one
+
+21. Better unit testing with Jest and Web Test Runner
+introducing experimental Jest support. 
+In a future release we will also move existing Karma projects to Web Test Runner to continue supporting browser-based unit testing. 
+This will be a no-op for the majority of developers.
+You can experiment with Jest in new projects by installing Jest with npm install jest --save-dev and updating your angular.json file:
+
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:jest",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        }
+      }
+    }
+  }
+}
+https://blog.angular.io/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca
+
+22. CSS View Transitions API  and Built-in support for Tailwind CSS
+https://angular.io/guide/route-animations
+
+23. Material Dark Mode support added
+
+24. TS 5.0 support (Non-experimental TypeScript decorators support added) https://www.typescriptlang.org/docs/handbook/decorators.html
+footer
+
+25. Material components token API
+https://material.angular.io/guide/mdc-migration
+
+
+26. Flexible ngOnDestroy
+This new feature allows you to inject DestroyRef corresponding to a component, directive, service or a pipe — and 
+register the onDestroy lifecycle hook. 
+The DestroyRef can be injected anywhere within an injection context, including 
+outside of your component — in such case the onDestroy hook is executed when a corresponding injector is destroyed.:
+
+import { Injectable, DestroyRef } from '@angular/core';
+
+@Injectable(...)
+export class AppService {
+  destroyRef = inject(DestroyRef);
+
+  destroy() {
+    this.destroyRef.onDestroy(() => /* cleanup */ );
+  }
+}
+
+
+27. DestroyRef & takeUntilDestroyed
+
+@Component({})
+class SomeComponent {
+  destroyRef = inject(DestroyRef);
+  store = inject(Store);
+  user: any;
+  constructor() {
+    const sub = this.store.select(getUser()).subscribe((user) => {
+      this.user = user    
+    });
+    destoryRef.onDestroy(() => {
+      sub.unsubscribe()
+    })
+    
+//OR
+    const sub = this.store.select(getUser()).pipe(takeUntilDestroyed())
+      .subscribe((user) => {
+      this.user = user    
+    });
+  }
+}
+Angular team has introduced DestroyRef and takeUntilDestroyed rxjs operator as the replacement for the ngOnDestroy lifecycle hook. 
+the ngOnDestroy is tied to classes, so it cannot be used in functions.
+The takeUntilDestroyed operator can only be used in the constructor context. 
+We need to pass destroyRef as an argument for using it outside the constructor. 
+This feature helps clean up signal effects; therefore, no manual cleanup is required, unlike subscriptions in rxjs.
+
+
+28. Dependency Injection Debugging APIs
+You can now use a new feature in Angular applications to investigate and solve issues with the dependency injection system.
+The feature provides APIs that allow you to retrieve information about 
+providers, tokens, injectors, scopes, and instances associated with your dependencies. 
+It also enables you to simulate different scenarios and testing cases.
+
+29. Optimizing Performance with Memory Caching in Angular Applications
+https://medium.com/@niteshdaga000/optimizing-performance-with-memory-caching-in-angular-applications-dad3efeb1f99
+
+30. afterRender and afterNextRender are available for developer preview. 
+The afterRender and afterNextRender functions let you register a render callback to be invoked after 
+Angular has finished rendering all components on the page into the DOM.
+These functions are different from the other lifecycle hooks described in this guide. Rather than a class method, 
+they are standalone functions that accept a callback. The execution of render callbacks is not tied to any specific component instance, 
+but instead an application-wide hook.
+
+31. Styles removal opt-in
+
+Angular v16 introduces a new opt-in feature to remove the styles of a component when its last instance is destroyed.
+
+This will be the default behavior in the future, but you can already opt in with:
+
+import { REMOVE_STYLES_ON_COMPONENT_DESTROY } from '@angular/platform-browser';
+providers: [
+  { provide: REMOVE_STYLES_ON_COMPONENT_DESTROY, useValue: true }
+]

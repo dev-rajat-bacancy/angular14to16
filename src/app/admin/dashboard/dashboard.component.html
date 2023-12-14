@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0">
+            <app-sidebar [pageName]="'dashboard'"></app-sidebar>
+        </div>
+        <div class="col-md-9 p-0">
+            <p>dashboard works</p>
+            <ng-template #tRef let-book="bookName" let-writer="writer" let-location>
+                <span> I am from {{location}} and like to read {{book}} written by {{writer}} ji. </span>
+                <app-support></app-support>
+            </ng-template>
+            <div #testRef> </div> 
+
+            <h3>With Directive</h3>
+            <ng-container *appViewContainerRef >
+                <app-support></app-support>
+            </ng-container> 
+        </div>
+    </div>
+</div>

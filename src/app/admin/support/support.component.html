@@ -1,0 +1,14 @@
+<!-- <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0">
+            <app-sidebar [pageName]="'support'"></app-sidebar>
+        </div>
+        <div class="col-md-9 p-0">
+            <p>support works</p>
+        </div>
+    </div>
+</div> -->
+
+<div *ngFor="let std of data">
+    <p>{{std.name}} - {{std.age}}</p>
+</div>

@@ -1,0 +1,11 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0">
+            <app-sidebar [pageName]="'feedback'"></app-sidebar>
+        </div>
+        <div class="col-md-9 p-0">
+            <p appClass>normal pipe and directives {{ 4 | double}}</p>
+            <p appClassStandalone>Standalone pipe and directives {{ 4 | doubleStandalone}}</p>
+        </div>
+    </div>
+</div>

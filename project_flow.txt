@@ -1,0 +1,37 @@
+To create standloane application use this command 
+
+ng new app_name --standalone=true 
+
+ng g c home 
+ng g c contact
+ng g c page-not-found
+
+
+
+// old style start
+
+ng g m admin --routing
+ng g c feedback --standalone=false
+
+// old style end 
+
+
+
+ng g c my-dashboard
+ng g c support
+
+create shared folder having subfolder like as header footer sidebar pipes and directives
+
+
+for designing purpose add bootstrap css js and jequey 
+put header and footer code and set the  home page layout
+
+
+
+lets understand the standalone pipes and directives
+
+ng g p double --skip-import --standalone=false
+ng g p double-standalone --standalone
+
+ng g d class --skip-import --standalone=false
+ng g d class-standalone --standalone
